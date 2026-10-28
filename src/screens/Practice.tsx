@@ -3,6 +3,7 @@ import type { Conversation } from '../types';
 import { canSpeak, speak, stopSpeaking } from '../speech';
 import { RECORDER_ERROR_TEXT, useRecorder, type Recording } from '../useRecorder';
 import { SpeakerLabel, TopBar, usePref } from '../ui';
+import VoicePicker from '../VoicePicker';
 
 type Mode = 'full' | 'chunks' | 'simple';
 const MODES: { id: Mode; label: string }[] = [
@@ -35,7 +36,7 @@ export default function Practice({
 
   useEffect(() => () => stopSpeaking(), []);
 
-  const rate = slow ? 0.7 : 0.95;
+  const rate = slow ? 0.75 : 1;
   const target = mode === 'simple' ? line.simple.en : line.en;
 
   const play = (texts: string | string[]) => speak(texts, rate, setPlayingPart).catch(() => setPlayingPart(-1));
@@ -118,6 +119,7 @@ export default function Practice({
               慢速
             </label>
           </div>
+          <VoicePicker />
 
           <button className={`record ${rec.recording ? 'on' : ''}`} onClick={toggleRecord}>
             {rec.recording ? `■ 停止錄音（${rec.elapsed.toFixed(0)} 秒）` : mine ? '● 重新錄一次' : '● 錄下我說的'}
